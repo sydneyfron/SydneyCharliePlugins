@@ -44,6 +44,46 @@ public class BasicStrategy {
 
     };
 
+    Play[][] section2Rules = {
+            /*         2  3  4  5  6  7  8  9  T  A  */
+            /* 11 */ { D, D, D, D, D, D, D, D, D, H },
+            /* 10 */ { D, D, D, D, D, D, D, D, H, H },
+            /*  9 */ { H, D, D, D, D, H, H, H, H, H },
+            /*  8 */ { H, H, H, H, H, H, H, H, H, H },
+            /*  7 */ { H, H, H, H, H, H, H, H, H, H },
+            /*  6 */ { H, H, H, H, H, H, H, H, H, H },
+            /*  5 */ { H, H, H, H, H, H, H, H, H, H },
+
+    };
+
+    Play[][] section3Rules = {
+            /*          2  3  4  5  6  7  8  9  T  A  */
+            /*A, 10 */ { S, S, S, S, S, S, S, S, S, S },
+            /* A, 9 */ { S, S, S, S, S, S, S, S, S, S },
+            /* A, 8 */ { S, S, S, S, S, S, S, S, S, S },
+            /* A, 7 */ { S, D, D, D, D, S, S, H, H, H },
+            /* A, 6 */ { H, D, D, D, D, H, H, H, H, H },
+            /* A, 5 */ { H, H, D, D, D, H, H, H, H, H },
+            /* A, 4 */ { H, H, D, D, D, H, H, H, H, H },
+            /* A, 3 */ { H, H, H, D, D, H, H, H, H, H },
+            /* A, 2 */ { H, H, H, D, D, H, H, H, H, H },
+    };
+
+    Play[][] section4Rules = {
+            /*           2  3  4  5  6  7  8  9  T  A  */
+            /* A, A */ { P, P, P, P, P, P, P, P, P, P },
+            /*10,10 */ { S, S, S, S, S, S, S, S, S, S },
+            /* 9, 9 */ { P, P, P, P, P, S, P, P, S, S },
+            /* 8, 8 */ { P, P, P, P, P, P, P, P, P, P },
+            /* 7, 7 */ { P, P, P, P, P, P, H, H, H, H },
+            /* 6, 6 */ { P, P, P, P, P, H, H, H, H, H },
+            /* 5, 5 */ { D, D, D, D, D, D, D, D, H, H },
+            /* 4, 4 */ { H, H, H, P, P, H, H, H, H, H },
+            /* 3, 3 */ { P, P, P, P, P, H, H, H, H, H },
+            /* 2, 2 */ { P, P, P, P, P, H, H, H, H, H },
+    };
+
+
     /**
      * Gets the play for player's hand vs. dealer up-card.
      * @param hand Hand player hand
@@ -58,10 +98,10 @@ public class BasicStrategy {
             // TODO: return doSection4(hand,upCard)
         }
         else if(hand.size() == 2 && (card1.getRank() == Card.ACE || card2.getRank() == Card.ACE)) {
-            // TODO: return doSection3(hand,upCard)
+            return doSection3(hand,upCard);
         }
         else if(hand.getValue() >=5 && hand.getValue() < 12) {
-            // TODO: return doSection2(hand,upCard)
+            return doSection2(hand,upCard);
         }
         else if(hand.getValue() >= 12)
             return doSection1(hand,upCard);
@@ -107,6 +147,106 @@ public class BasicStrategy {
         return play;
     }
 
+
+    protected Play doSection2(Hand hand, Card upCard) {
+        int value = hand.getValue();
+
+        // Section 2 currently only supports hands >= 5 (see above).
+        if(value < 5)
+            return Play.NONE;
+
+
+        int rowIndex = 11 - value;
+
+        Play[] row = section2Rules[rowIndex];
+
+
+        // Subtract 2 since the dealer's up-card starts at 2
+        int colIndex = upCard.getRank() - 2;
+
+        if(upCard.isFace())
+            colIndex = 10 - 2;
+
+            // Ace is the 10th card (index 9)
+        else if(upCard.isAce())
+            colIndex = 9;
+
+        // At this row, col we should have the correct play defined.
+        Play play = row[colIndex];
+
+        return play;
+    }
+
+    protected Play doSection3(Hand hand, Card upCard) {
+        int value = hand.getValue();
+
+        // Section 3 currently only supports hands >= 13 (see above).
+        if(value < 13)
+            return Play.NONE;
+
+
+        int rowIndex = 21 - value;
+
+        Play[] row = section3Rules[rowIndex];
+
+
+        // Subtract 2 since the dealer's up-card starts at 2
+        int colIndex = upCard.getRank() - 2;
+
+        if(upCard.isFace())
+            colIndex = 10 - 2;
+
+            // Ace is the 10th card (index 9)
+        else if(upCard.isAce())
+            colIndex = 9;
+
+        // At this row, col we should have the correct play defined.
+        Play play = row[colIndex];
+
+        return play;
+    }
+
+    protected Play doSection4(Hand hand, Card upCard) {
+        int value = hand.getValue();
+
+        // Section 4  only supports hands that are pairs.
+        if(!hand.isPair()) {
+            return Play.NONE;
+        }
+
+        // Gets ramk of pair
+        int rank = hand.getCard(0).getRank();
+        int rowIndex;
+
+        if (hand.getCard(0).isAce()) {
+            rowIndex = 0;
+        } else if (hand.getCard(0).isFace() || rank == 10) {
+            rowIndex = 1;
+        } else {
+            // Ranks 2-9 map to indices 9 down to 2
+            // Calc: 11 - rank
+            rowIndex = 11 - rank;
+        }
+
+        Play [] row = section4Rules[rowIndex];
+
+        // Subtract 2 since the dealer's up-card starts at 2
+        int colIndex = upCard.getRank() - 2;
+
+        if(upCard.isFace())
+            colIndex = 10 - 2;
+
+            // Ace is the 10th card (index 9)
+        else if(upCard.isAce())
+            colIndex = 9;
+
+        // At this row, col we should have the correct play defined.
+        Play play = row[colIndex];
+
+        return play;
+    }
+
+
     /**
      * Validates a hand and up-card.
      * @param hand Hand
@@ -124,6 +264,20 @@ public class BasicStrategy {
      */
     boolean isValid(Hand hand) {
         // TODO: Complete.
+        if (hand == null){
+            return false;
+        }
+        if (hand.size() < 2 || hand.size()>= 5) {
+            return false;
+        }
+
+        // Validate hand has not bust, won, or impossible value of 1
+        if (hand.getValue() >= 21 || hand.getValue() < 2) {
+            return false;
+        }
+
+        // SHOULD WE CHECK FOR IS CHARLIE BLACKJACK BUST ETC
+
         return true;
     }
 
@@ -134,6 +288,19 @@ public class BasicStrategy {
      */
     boolean isValid(Card card) {
         // TODO: Complete.
+        if ( card ==null) {
+            return false;
+        }
+        // Only valid ranks are 1-13 (ace=1, king =13)
+        if (card.getRank()<=0 && card.getRank()>13){
+            return false;
+        }
+        // The card is only one of the 4 valid suits
+        if ( card.getSuit()!= Card.Suit.CLUBS || card.getSuit()!= Card.Suit.DIAMONDS || card.getSuit()!= Card.Suit.SPADES || card.getSuit()!= Card.Suit.HEARTS) {
+            return false;
+        }
+
         return true;
+
     }
 }
