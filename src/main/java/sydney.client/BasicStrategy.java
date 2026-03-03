@@ -263,7 +263,7 @@ public class BasicStrategy {
             return false;
         }
         // Validate hand has not bust, won 21, or less then or equal to 1
-        if (hand.getValue() >= 21 || hand.getValue() < 2) {
+        if (hand.getValue() >= 21 || hand.getValue() < 4) {
             return false;
         }
 
