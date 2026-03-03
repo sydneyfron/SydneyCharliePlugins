@@ -80,9 +80,8 @@ public class BasicStrategy {
             /* 5, 5 */ { D, D, D, D, D, D, D, D, H, H },
             /* 4, 4 */ { H, H, H, P, P, H, H, H, H, H },
             /* 3, 3 */ { P, P, P, P, P, H, H, H, H, H },
-            /* 2, 2 */ { P, P, P, P, P, H, H, H, H, H },
+            /* 2, 2 */ { P, P, P, P, P, P, H, H, H, H },
     };
-
 
     /**
      * Gets the play for player's hand vs. dealer up-card.
@@ -95,7 +94,7 @@ public class BasicStrategy {
         Card card2 = hand.getCard(1);
 
         if(hand.isPair()) {
-            // TODO: return doSection4(hand,upCard)
+            return doSection4(hand,upCard);
         }
         else if(hand.size() == 2 && (card1.getRank() == Card.ACE || card2.getRank() == Card.ACE)) {
             return doSection3(hand,upCard);
@@ -117,19 +116,15 @@ public class BasicStrategy {
     protected Play doSection1(Hand hand, Card upCard) {
         int value = hand.getValue();
 
-        // Section 1 currently only supports hands >= 20 (see above).
+        // Section 1 currently only supports hands >= 12 (see above).
         if(value < 12)
             return Play.NONE;
-
-        // TODO: Complete getting the row in the table.
 
         // Subtract 21 since the player's hand starts at 21 and we're working
         // our way down through section 1 from index 0.
         int rowIndex = 21 - value;
 
         Play[] row = section1Rules[rowIndex];
-
-        // TODO: Complete getting the column in the table.
 
         // Subtract 2 since the dealer's up-card starts at 2
         int colIndex = upCard.getRank() - 2;
@@ -155,11 +150,9 @@ public class BasicStrategy {
         if(value < 5)
             return Play.NONE;
 
-
         int rowIndex = 11 - value;
 
         Play[] row = section2Rules[rowIndex];
-
 
         // Subtract 2 since the dealer's up-card starts at 2
         int colIndex = upCard.getRank() - 2;
@@ -214,7 +207,7 @@ public class BasicStrategy {
             return Play.NONE;
         }
 
-        // Gets ramk of pair
+        // Gets rank of pair
         int rank = hand.getCard(0).getRank();
         int rowIndex;
 
@@ -253,7 +246,7 @@ public class BasicStrategy {
      * @param upCard Up-card
      * @return True if both are valid, false otherwise
      */
-    boolean isValid(Hand hand, Card upCard) {
+    public boolean isValid(Hand hand, Card upCard) {
         return isValid(hand) && isValid(upCard);
     }
 
@@ -262,16 +255,14 @@ public class BasicStrategy {
      * @param hand Hand
      * @return True if valid, false otherwise
      */
-    boolean isValid(Hand hand) {
-        // TODO: Complete.
+    public boolean isValid(Hand hand) {
         if (hand == null){
             return false;
         }
         if (hand.size() < 2 || hand.size()>= 5) {
             return false;
         }
-
-        // Validate hand has not bust, won, or impossible value of 1
+        // Validate hand has not bust, won 21, or less then or equal to 1
         if (hand.getValue() >= 21 || hand.getValue() < 2) {
             return false;
         }
@@ -286,8 +277,7 @@ public class BasicStrategy {
      * @param card Card
      * @return True if valid, false otherwise
      */
-    boolean isValid(Card card) {
-        // TODO: Complete.
+    public boolean isValid(Card card) {
         if ( card ==null) {
             return false;
         }
