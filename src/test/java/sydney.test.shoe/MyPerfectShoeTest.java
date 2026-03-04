@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * This class is the minimalist perfect  test case.
- * @author Ron.Coleman
+ * @author sydney
  */
 public class MyPerfectShoeTest extends Perfect implements IUi {
     private Hid you;
@@ -84,9 +84,7 @@ public class MyPerfectShoeTest extends Perfect implements IUi {
         if (myTurn && hid.getSeat() == Seat.YOU){
             play(hid);
         }
-
-
-
+        
         info("DEAL: "+hid+" card: "+card+" hand values: "+handValues[0]+", "+handValues[1]);
     }
 

@@ -1,13 +1,11 @@
 package sydney.test.bs.invalid;
 
-
 import charlie.card.Hid;
 import charlie.dealer.Seat;
 import junit.framework.TestCase;
 import charlie.card.Card;
 import charlie.card.Hand;
 import sydney.client.BasicStrategy;
-
 
 public class TestInvalidHandValue extends TestCase{
     public void test() {

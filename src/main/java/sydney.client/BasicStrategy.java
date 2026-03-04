@@ -41,7 +41,6 @@ public class BasicStrategy {
             /* 14 */ { S, S, S, S, S, H, H, H, H, H },
             /* 13 */ { S, S, S, S, S, H, H, H, H, H },
             /* 12 */ { H, H, S, S, S, H, H, H, H, H },
-
     };
 
     Play[][] section2Rules = {
@@ -53,7 +52,6 @@ public class BasicStrategy {
             /*  7 */ { H, H, H, H, H, H, H, H, H, H },
             /*  6 */ { H, H, H, H, H, H, H, H, H, H },
             /*  5 */ { H, H, H, H, H, H, H, H, H, H },
-
     };
 
     Play[][] section3Rules = {
@@ -99,11 +97,12 @@ public class BasicStrategy {
         else if(hand.size() == 2 && (card1.getRank() == Card.ACE || card2.getRank() == Card.ACE)) {
             return doSection3(hand,upCard);
         }
-        else if(hand.getValue() >=5 && hand.getValue() < 12) {
+        else if (hand.getValue() >=5 && hand.getValue() < 12) {
             return doSection2(hand,upCard);
         }
-        else if(hand.getValue() >= 12)
-            return doSection1(hand,upCard);
+        else if(hand.getValue() >= 12) {
+            return doSection1(hand, upCard);
+        }
 
         return Play.NONE;
     }
@@ -177,11 +176,9 @@ public class BasicStrategy {
         if(value < 13)
             return Play.NONE;
 
-
         int rowIndex = 21 - value;
 
         Play[] row = section3Rules[rowIndex];
-
 
         // Subtract 2 since the dealer's up-card starts at 2
         int colIndex = upCard.getRank() - 2;
@@ -229,7 +226,7 @@ public class BasicStrategy {
         if(upCard.isFace())
             colIndex = 10 - 2;
 
-            // Ace is the 10th card (index 9)
+        // Ace is the 10th card (index 9)
         else if(upCard.isAce())
             colIndex = 9;
 
@@ -238,7 +235,6 @@ public class BasicStrategy {
 
         return play;
     }
-
 
     /**
      * Validates a hand and up-card.
@@ -259,6 +255,7 @@ public class BasicStrategy {
         if (hand == null){
             return false;
         }
+        // You need at least 2 cards in hand, but if u have 5 or more should have charlie and have won
         if (hand.size() < 2 || hand.size()>= 5) {
             return false;
         }
@@ -266,9 +263,6 @@ public class BasicStrategy {
         if (hand.getValue() >= 21 || hand.getValue() < 4) {
             return false;
         }
-
-        // SHOULD WE CHECK FOR IS CHARLIE BLACKJACK BUST ETC
-
         return true;
     }
 
@@ -291,6 +285,5 @@ public class BasicStrategy {
         }
 
         return true;
-
     }
 }
